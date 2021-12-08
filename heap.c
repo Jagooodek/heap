@@ -122,6 +122,8 @@ void pop() {
     }
 
     size--;
+    if(size == 0)
+        top = NULL;
     free(tmp);
 }
 
