@@ -1,13 +1,11 @@
 #ifndef HEAP_H_
 #define HEAP_H_
 
-
-void addElement(int key, int value);
+void push(int key, int value);
+void pop();
+void setCmp(int (*)(int, int));
 int topValue();
 int topKey();
-void push();
 int heapSize();
-void setCmp(int (*)(int, int));
-
 
 #endif
