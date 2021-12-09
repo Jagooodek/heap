@@ -79,51 +79,47 @@ void push(int key, int value) {
         tmpHeapNode->rightChild = newNode;
     newNode->parent = tmpHeapNode;
     
-    struct heapNode *a = newNode->parent;
-    struct heapNode *b = newNode;
-
-    while((*cmp)(b->value, a->value)) {
-        swap(a, b);
-        if(a->parent == NULL)
+    while((*cmp)(newNode->value, newNode->parent->value)) {
+        swap(newNode, newNode->parent);
+        newNode = newNode->parent;
+        if(newNode->parent == NULL)
             break;
-        b = a;
-        a = a->parent;
     }
 }
 
 void pop() {
-    struct heapNode *tmp = top;
-    while(tmp->leftChild != NULL || tmp->rightChild != NULL) {
-        if(tmp->leftChild != NULL && tmp->rightChild != NULL) {
-            if((*cmp)(tmp->leftChild->value, tmp->rightChild->value)) {
-                swap(tmp, tmp->leftChild);
-                tmp = tmp->leftChild;
+    struct heapNode *nodeToDelete = top;
+    while(nodeToDelete->leftChild != NULL || nodeToDelete->rightChild != NULL) {
+        if(nodeToDelete->leftChild != NULL && nodeToDelete->rightChild != NULL) {
+            if((*cmp)(nodeToDelete->leftChild->value, nodeToDelete->rightChild->value)) {
+                swap(nodeToDelete, nodeToDelete->leftChild);
+                nodeToDelete = nodeToDelete->leftChild;
             } else {
-                swap(tmp, tmp->rightChild);
-                tmp = tmp->rightChild;
+                swap(nodeToDelete, nodeToDelete->rightChild);
+                nodeToDelete = nodeToDelete->rightChild;
             }
-        }else if(tmp->leftChild != NULL) {
-            swap(tmp, tmp->leftChild);
-            tmp = tmp->leftChild;
-        }else if(tmp->rightChild != NULL) {
-            swap(tmp, tmp->rightChild);
-            tmp = tmp->rightChild;
+        } else if(nodeToDelete->leftChild != NULL) {
+            swap(nodeToDelete, nodeToDelete->leftChild);
+            nodeToDelete = nodeToDelete->leftChild;
+        } else if(nodeToDelete->rightChild != NULL) {
+            swap(nodeToDelete, nodeToDelete->rightChild);
+            nodeToDelete = nodeToDelete->rightChild;
         }
 
     }
 
     
-    if(tmp->parent != NULL) {
-        if(tmp->parent->leftChild == tmp) {
-            tmp->parent->leftChild = NULL;
+    if(nodeToDelete->parent != NULL) {
+        if(nodeToDelete->parent->leftChild == nodeToDelete) {
+            nodeToDelete->parent->leftChild = NULL;
         } else {
-            tmp->parent->rightChild = NULL;
+            nodeToDelete->parent->rightChild = NULL;
         }
     }
 
     size--;
     if(size == 0)
         top = NULL;
-    free(tmp);
+    free(nodeToDelete);
 }
 
